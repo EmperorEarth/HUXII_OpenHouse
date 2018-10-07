@@ -49,7 +49,7 @@
 
       // The stops and route result will be stored in this layer
       var routeLayer = new GraphicsLayer();
-
+      var routeResult = null;
       // Setup the route parameters
       var routeParams = new RouteParameters({
         stops: new FeatureSet(),
@@ -113,12 +113,13 @@
         // Execute the route task if 2 or more stops are input
         routeParams.stops.features.push(stop);
         if (routeParams.stops.features.length >= 2) {
+          routeLayer.remove(routeResult);
           routeTask.solve(routeParams).then(showRoute);
         }
       }
       // Adds the solved route to the map as a graphic
       function showRoute(data) {
-        var routeResult = data.routeResults[0].route;
+        routeResult = data.routeResults[0].route;
         routeResult.symbol = routeSymbol;
         routeLayer.add(routeResult);
         console.log(data.routeResults[0].directions['strings'])
